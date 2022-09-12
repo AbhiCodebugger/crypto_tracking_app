@@ -1,6 +1,7 @@
 import 'package:crypto_tracker/model/cryptocurrency.dart';
 import 'package:crypto_tracker/provider/crypto_provider.dart';
 import 'package:crypto_tracker/provider/theme_provider.dart';
+import 'package:crypto_tracker/view/details_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -116,6 +117,14 @@ class HomeView extends StatelessWidget {
                                     ),
                                   ],
                                 ),
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: ((context) => DetailView(
+                                                id: currentCryto.id!,
+                                              ))));
+                                },
                               );
                             }));
                       } else {

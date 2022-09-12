@@ -26,4 +26,9 @@ class CryptoProvider extends ChangeNotifier {
       fetchCrypto();
     });
   }
+
+  Crypto fetchCryptoById(String id) {
+    Crypto crypto = cryptoData.where((element) => element.id == id).toList()[0];
+    return crypto;
+  }
 }

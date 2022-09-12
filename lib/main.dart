@@ -33,6 +33,7 @@ class MyApp extends StatelessWidget {
         builder: ((context, theme, child) {
           return MaterialApp(
             title: 'Flutter Demo',
+            debugShowCheckedModeBanner: false,
             theme: lighTheme,
             darkTheme: darkTheme,
             themeMode: theme.themeMode,
