@@ -1,5 +1,6 @@
 import 'package:crypto_tracker/model/cryptocurrency.dart';
 import 'package:crypto_tracker/provider/crypto_provider.dart';
+import 'package:crypto_tracker/provider/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -8,26 +9,43 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeProvider themeProvider = Provider.of<ThemeProvider>(context);
     return SafeArea(
       child: Scaffold(
         body: Container(
-          padding: const EdgeInsets.only(top: 10, left: 20),
+          padding: const EdgeInsets.only(top: 10, left: 20, right: 8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'Cryto Currency',
+                'CryptoCurrency',
                 style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: Colors.grey),
               ),
-              const Text(
-                'Today',
-                style: TextStyle(
-                  fontSize: 40,
-                  fontWeight: FontWeight.bold,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Market Price',
+                    style: TextStyle(
+                      fontSize: 40,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(width: 20),
+                  IconButton(
+                    icon: themeProvider.themeMode == ThemeMode.light
+                        ? const Icon(
+                            Icons.dark_mode,
+                          )
+                        : const Icon(Icons.light_mode),
+                    onPressed: () {
+                      themeProvider.toggleTheme();
+                    },
+                  )
+                ],
               ),
               const SizedBox(height: 12),
               Expanded(
@@ -39,7 +57,10 @@ class HomeView extends StatelessWidget {
                       );
                     } else {
                       if (data.cryptoData.isNotEmpty) {
-                        return ListView.builder(
+                        return ListView.separated(
+                            separatorBuilder: (context, index) => const Divider(
+                                  color: Colors.grey,
+                                ),
                             physics: const BouncingScrollPhysics(
                                 parent: AlwaysScrollableScrollPhysics()),
                             itemCount: data.cryptoData.length,
@@ -56,14 +77,18 @@ class HomeView extends StatelessWidget {
                                 subtitle:
                                     Text(currentCryto.symbol!.toUpperCase()),
                                 trailing: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      "₹ ${currentCryto.currentPrice}",
-                                      style: const TextStyle(
-                                          color: Colors.blue,
+                                      "₹${currentCryto.currentPrice}",
+                                      style: TextStyle(
+                                          color: themeProvider.themeMode ==
+                                                  ThemeMode.dark
+                                              ? Colors.white
+                                              : const Color(0xff560027),
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 16),
+                                          fontSize: 18),
                                     ),
                                     Builder(
                                       builder: ((context) {
@@ -74,14 +99,16 @@ class HomeView extends StatelessWidget {
                                                 .priceChangePercentage24H!;
                                         if (priceChange < 0) {
                                           return Text(
-                                            '${priceChangePercentage.toStringAsFixed(2)}% (₹${priceChange.toStringAsFixed(3)})',
+                                            '${priceChangePercentage.toStringAsFixed(2)}% ↓',
                                             style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
                                                 color: Colors.red),
                                           );
                                         } else {
                                           return Text(
-                                            '${priceChangePercentage.toStringAsFixed(2)}% (₹${priceChange.toStringAsFixed(3)})',
+                                            '${priceChangePercentage.toStringAsFixed(2)}% ↑',
                                             style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
                                                 color: Colors.green),
                                           );
                                         }
