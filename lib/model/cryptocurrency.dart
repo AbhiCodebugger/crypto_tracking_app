@@ -57,6 +57,7 @@ class Crypto {
   DateTime? atlDate;
 
   DateTime? lastUpdated;
+  bool isFavourite = false;
 
   factory Crypto.fromJson(Map<String, dynamic> json) => Crypto(
         id: json["id"],
